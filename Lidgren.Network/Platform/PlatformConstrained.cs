@@ -78,12 +78,12 @@ namespace Lidgren.Network
 
 	public static partial class NetTime
 	{
-		private static readonly long s_timeInitialized = Environment.TickCount;
+		private static readonly long s_timeInitialized = DateTime.Now.Ticks;
 		
 		/// <summary>
 		/// Get number of seconds since the application started
 		/// </summary>
-		public static double Now { get { return (double)((uint)Environment.TickCount - s_timeInitialized) / 1000.0; } }
+		public static double Now { get { return (double)(DateTime.Now.Ticks - s_timeInitialized) / 10000000.0; } }
 	}
 }
 #endif
