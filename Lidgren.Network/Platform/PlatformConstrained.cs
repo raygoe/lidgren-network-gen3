@@ -1,5 +1,6 @@
 ﻿#if __CONSTRAINED__ || UNITY_STANDALONE_LINUX || UNITY
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
@@ -17,7 +18,7 @@ namespace Lidgren.Network
 		[CLSCompliant(false)]
 		public static ulong GetPlatformSeed(int seedInc)
 		{
-			ulong seed = (ulong)Environment.TickCount + (ulong)seedInc;
+			ulong seed = (ulong)Stopwatch.GetTimestamp();
 			return seed ^ ((ulong)(new object().GetHashCode()) << 32);
 		}
 		
@@ -78,12 +79,13 @@ namespace Lidgren.Network
 
 	public static partial class NetTime
 	{
-		private static readonly long s_timeInitialized = DateTime.Now.Ticks;
-		
+		private static readonly long s_timeInitialized = Stopwatch.GetTimestamp();
+		private static readonly double s_dInvFreq = 1.0 / (double)Stopwatch.Frequency;
+
 		/// <summary>
 		/// Get number of seconds since the application started
 		/// </summary>
-		public static double Now { get { return (double)(DateTime.Now.Ticks - s_timeInitialized) / 10000000.0; } }
+		public static double Now { get { return (double)(Stopwatch.GetTimestamp() - s_timeInitialized) * s_dInvFreq; } }
 	}
 }
 #endif
