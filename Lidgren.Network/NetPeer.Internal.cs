@@ -46,10 +46,10 @@ namespace Lidgren.Network
 		/// </summary>
 		public Socket Socket { get { return m_socket; } }
 
-        /// <summary>
+		/// <summary>
 		/// Returns the approx frames since last count.
 		/// </summary>
-        public uint FrameCount { get { uint fc = m_frameCounter; m_frameCounter = fc % 3; return fc; } }
+		public long FrameCount { get { uint fc = m_frameCounter; m_frameCounter = fc % 3; return fc; } }
 
 		/// <summary>
 		/// Call this to register a callback for when a new message arrives
@@ -74,7 +74,7 @@ namespace Lidgren.Network
 				return;
 
 			// remove all callbacks regardless of sync context
-            m_receiveCallbacks.RemoveAll(tuple => tuple.Item2.Equals(callback));
+			m_receiveCallbacks.RemoveAll(tuple => tuple.Item2.Equals(callback));
 
 			if (m_receiveCallbacks.Count < 1)
 				m_receiveCallbacks = null;
@@ -317,13 +317,13 @@ namespace Lidgren.Network
 			double now = NetTime.Now;
 			double delta = now - m_lastHeartbeat;
 
-            int maxCHBpS = 1250 - m_connections.Count;
+			int maxCHBpS = 1250 - m_connections.Count;
 			if (maxCHBpS < 250)
 				maxCHBpS = 250;
-            if (delta > (1.0 / (double)maxCHBpS) || delta < 0.0) // max connection heartbeats/second max
-            {
-                m_frameCounter++;
-                m_lastHeartbeat = now;
+			if (delta > (1.0 / (double)maxCHBpS) || delta < 0.0) // max connection heartbeats/second max
+			{
+				m_frameCounter++;
+				m_lastHeartbeat = now;
 
 				// do handshake heartbeats
 				if ((m_frameCounter % 3) == 0)
@@ -398,13 +398,9 @@ namespace Lidgren.Network
 					SendPacket(len, unsent.Item1, 1, out connReset);
 				}
 			}
-            else
-            {
 
-            }
-
-            if (m_upnp != null)
-                m_upnp.CheckForDiscoveryTimeout();
+			if (m_upnp != null)
+				m_upnp.CheckForDiscoveryTimeout();
 
 			//
 			// read from socket
